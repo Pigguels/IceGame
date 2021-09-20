@@ -488,7 +488,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_WalkSpeed: 6.5
-  m_LookSensitivity: 4
+  m_JumpHeight: 1
+  m_Gravity: 9.81
+  m_Drag: 1
+  m_LookSensitivity: 5
   m_PitchClamp: 60
   m_Head: {fileID: 1604058616}
 --- !u!143 &1876948476
@@ -503,7 +506,7 @@ CharacterController:
   m_Enabled: 1
   serializedVersion: 2
   m_Height: 2
-  m_Radius: 0.5
+  m_Radius: 0.2
   m_SlopeLimit: 70
   m_StepOffset: 0.3
   m_SkinWidth: 0.08

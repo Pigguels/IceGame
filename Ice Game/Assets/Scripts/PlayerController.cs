@@ -9,8 +9,10 @@ public class PlayerController : MonoBehaviour
     private float m_MoveSpeed;
     private Vector3 m_MoveDir;
 
-    private float m_Gravity = 9.81f;
-    private float m_Drag = 1f;
+    public float m_JumpHeight = 1.5f;
+
+    public float m_Gravity = 9.81f;
+    public float m_Drag = 1f;
     private Vector3 m_Velocity;
 
     private bool m_IsGrounded;
@@ -37,11 +39,16 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        m_MoveDir = (transform.right * Input.GetAxis("Horizontal") + transform.forward * Input.GetAxis("Vertical")).normalized;
+        m_MoveDir = (transform.right * Input.GetAxisRaw("Horizontal") + transform.forward * Input.GetAxisRaw("Vertical")).normalized;
 
         m_IsGrounded = IsGrounded();
 
         ApplyPhysics();
+
+        if (m_IsGrounded && Input.GetKeyDown(KeyCode.Space))
+        {
+            m_Velocity.y += Mathf.Sqrt(-m_JumpHeight / 2f * -m_Gravity) * 2f;
+        }
 
         Walk();
     }
@@ -53,15 +60,15 @@ public class PlayerController : MonoBehaviour
 
     private bool IsGrounded()
     {
-        RaycastHit hit;
-        return Physics.SphereCast(transform.position + m_CharController.center, m_CharController.radius + m_CharController.skinWidth, Vector3.down, out hit, m_CharController.height * 0.5f, ~gameObject.layer);
+        RaycastHit sphereHit;
+        return Physics.SphereCast(transform.position + m_CharController.center, m_CharController.radius, Vector3.down, out sphereHit, (m_CharController.height * 0.5f) - m_CharController.radius + m_CharController.skinWidth + 0.01f, ~gameObject.layer);
     }
 
     private void ApplyPhysics()
     {
         if (m_IsGrounded)
             m_Velocity.y = 0f;
-        else if (m_Velocity.y > (m_Gravity * m_Gravity))
+        else if (m_Velocity.y > -(m_Gravity * m_Gravity))
             m_Velocity.y -= m_Gravity * Time.deltaTime;
 
         m_Velocity.x = Mathf.MoveTowards(m_Velocity.x, 0f, m_Drag);

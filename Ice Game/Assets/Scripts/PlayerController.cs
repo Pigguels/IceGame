@@ -53,7 +53,7 @@ public class PlayerController : MonoBehaviour
         Walk();
     }
 
-    private void FixedUpdate()
+    private void LateUpdate()
     {
         Look();
     }
@@ -77,8 +77,8 @@ public class PlayerController : MonoBehaviour
 
     private void Look()
     {
-        m_Pitch -= Input.GetAxis("Mouse Y") * m_LookSensitivity;
-        m_Yaw += Input.GetAxis("Mouse X") * m_LookSensitivity;
+        m_Pitch -= Input.GetAxis("Mouse Y") * m_LookSensitivity * Time.deltaTime;
+        m_Yaw += Input.GetAxis("Mouse X") * m_LookSensitivity * Time.deltaTime;
 
         m_Pitch = Mathf.Clamp(m_Pitch, -m_PitchClamp, m_PitchClamp);
 
